@@ -6,6 +6,7 @@ import { LangContext } from "../../../libraries/langContext/langContext";
 import "./styles.scss";
 
 const fallbackLanguages: Record<string, string> = {
+  zh: "中文",
   en: "English",
   it: "Italiano",
   de: "Deutsch",
@@ -17,7 +18,6 @@ const fallbackLanguages: Record<string, string> = {
   am: "አማርኛ",
   cs: "čeština",
   sq: "Shqiptar",
-  zh: "中国人",
 };
 
 const LangSwitcher: FunctionComponent = () => {

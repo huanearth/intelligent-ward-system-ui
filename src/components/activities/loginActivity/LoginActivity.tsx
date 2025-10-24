@@ -30,24 +30,37 @@ const LoginActivity: FC = () => {
     password: "",
   };
 
-  // 移除验证，允许任何用户名和密码
   const validationSchema = object({
-    username: string(),
-    password: string(),
+    username: string().required(t("login.insertavalidusername")),
+    password: string().required(t("login.insertthepassword")),
   });
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values: IValues) => {
-      // 允许任何用户名和密码登录，如果为空则使用默认值
-      const loginValues = {
-        username: values.username || "admin",
-        password: values.password || "admin"
-      };
-      dispatch(setAuthentication(loginValues));
+      dispatch(setAuthentication(values));
     },
   });
+
+  // 移除验证，允许任何用户名和密码
+  // const validationSchema = object({
+  //   username: string(),
+  //   password: string(),
+  // });
+
+  // const formik = useFormik({
+  //   initialValues,
+  //   validationSchema,
+  //   onSubmit: (values: IValues) => {
+  //     // 允许任何用户名和密码登录，如果为空则使用默认值
+  //     const loginValues = {
+  //       username: values.username || "admin",
+  //       password: values.password || "admin",
+  //     };
+  //     dispatch(setAuthentication(loginValues));
+  //   },
+  // });
 
   const [state, setState] = useState({ isPasswordVisible: false });
 

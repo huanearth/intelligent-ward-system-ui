@@ -22,29 +22,45 @@ const userSettingsApi = new UserSettingsApi(customConfiguration());
 
 export const setAuthentication = createAsyncThunk(
   "main/getLayouts",
-  async (payload: { username: string; password: string }, thunkApi) => {
-    // 跳过真实的API认证，直接返回模拟的成功数据
-    const mockUserCredentials = {
-      token: "mock-jwt-token",
-      refreshToken: "mock-refresh-token",
-      tokenType: "Bearer"
-    };
-    
-    const mockUserProfile = {
-      userName: payload.username,
-      userGroupName: "admin",
-      permissions: ["all"]
-    };
-    
-    // 保存模拟的认证数据到session
-    saveAuthenticationDataToSession(mockUserCredentials);
-    savePermissionDataToSession(mockUserProfile);
-    
-    return {
-      ...mockUserCredentials,
-      ...mockUserProfile,
-    };
-  }
+  async (payload: { username: string; password: string }, thunkApi) =>
+    firstValueFrom(
+      concat(
+        loginApi
+          .authenticateUser({ loginRequest: payload })
+          .pipe(tap(saveAuthenticationDataToSession)),
+        usersApi
+          .retrieveProfileByCurrentLoggedInUser()
+          .pipe(tap(savePermissionDataToSession))
+      ).pipe(toArray())
+    )
+      .then(([userCredentials, me]) => ({
+        ...userCredentials,
+        ...me,
+      }))
+      .catch((error) => thunkApi.rejectWithValue(error.response))
+  // async (payload: { username: string; password: string }, thunkApi) => {
+  //   // 跳过真实的API认证，直接返回模拟的成功数据
+  //   const mockUserCredentials = {
+  //     token: "mock-jwt-token",
+  //     refreshToken: "mock-refresh-token",
+  //     tokenType: "Bearer",
+  //   };
+
+  //   const mockUserProfile = {
+  //     userName: payload.username,
+  //     userGroupName: "admin",
+  //     permissions: ["all"],
+  //   };
+
+  //   // 保存模拟的认证数据到session
+  //   saveAuthenticationDataToSession(mockUserCredentials);
+  //   savePermissionDataToSession(mockUserProfile);
+
+  //   return {
+  //     ...mockUserCredentials,
+  //     ...mockUserProfile,
+  //   };
+  // }
 );
 
 export const setLogout =

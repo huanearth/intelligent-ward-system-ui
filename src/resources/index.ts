@@ -25,6 +25,7 @@ import custom_cs from "../customization/i18n/custom_cs.json";
 import custom_am from "../customization/i18n/custom_am.json";
 
 const resources = {
+  zh: { translation: _.merge(zh, custom_zh) },
   en: { translation: _.merge(en, custom_en) },
   it: { translation: _.merge(it, custom_it) },
   ar: { translation: _.merge(ar, custom_ar) },
@@ -32,7 +33,6 @@ const resources = {
   es: { translation: _.merge(es, custom_es) },
   fr: { translation: _.merge(fr, custom_fr) },
   pt: { translation: _.merge(pt, custom_pt) },
-  zh: { translation: _.merge(zh, custom_zh) },
   sw: { translation: _.merge(sw, custom_sw) },
   sq: { translation: _.merge(sq, custom_sq) },
   cs: { translation: _.merge(cs, custom_cs) },
